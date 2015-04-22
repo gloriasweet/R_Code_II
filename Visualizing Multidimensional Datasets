@@ -1,0 +1,73 @@
+#different ways of visualizing highly multidimensional data sets
+#http://rpubs.com/danmirman/plotting_factor_analysis
+
+load(url("http://dmirman.github.io/FAex.Rdata"))
+summary(loadings)
+Ord <- c(17, 16, 13, 15, 12,  2, 3,  5,  9,  8, 11,  7, 14,  6,  4,  10,  1)
+loadings$Test <- reorder(loadings$Test, Ord) 
+
+#The factors are in separate columns, so we need to melt the data into a “long” form for 
+#plotting (you’ll need to have loaded the reshape2 package)
+
+install.packages("reshape2")
+library(reshape2)
+
+loadings.m <- melt(loadings, id="Test", 
+                   measure=c("Semantic Recognition", "Speech Production", 
+                             "Speech Recognition", "Semantic Errors"), 
+                   variable.name="Factor", value.name="Loading")
+
+
+install.packages("ggplot2")
+library(ggplot2)
+
+#For each test, plot the loading as length and fill color of a bar
+# note that the length will be the absolute value of the loading but the 
+# fill color will be the signed value, more on this below
+
+#the contribution of a measure to a factor is reflected by the absolute value of the loading, 
+#the sign just reflects the scale direction of the measurement. 
+
+ggplot(loadings.m, aes(Test, abs(Loading), fill=Loading)) + 
+  facet_wrap(~ Factor, nrow=1) + #place the factors in separate facets
+  geom_bar(stat="identity") + #make the bars
+  coord_flip() + #flip the axes so the test names can be horizontal  
+  #define the fill color gradient: blue=positive, red=negative
+  scale_fill_gradient2(name = "Loading", 
+                       high = "blue", mid = "white", low = "red", 
+                       midpoint=0, guide=F) +
+  ylab("Loading Strength") + #improve y-axis label
+  theme_bw(base_size=10) #use a black-and0white theme with set font size
+
+
+#Plotting the correlations
+summary(corrs)
+corrs.m <- melt(corrs, id="Test", variable.name="Test2", value.name="Correlation")
+summary(corrs.m)
+
+#It will be easier to understand the graph if the tests 
+#that went into each correlation follow the same order:
+  
+corrs.m$Test2 <- reorder(corrs.m$Test2, rep(Ord, each=17))
+
+#plot the correlation matrix
+
+install.packages("grid")
+library(grid) #for adjusting plot margins
+#place the tests on the x- and y-axes, 
+#fill the elements with the strength of the correlation
+ggplot(corrs.m, aes(Test2, Test, fill=abs(Correlation))) + 
+  geom_tile() + #rectangles for each correlation
+  #add actual correlation value in the rectangle
+  geom_text(aes(label = round(Correlation, 2)), size=2.5) + 
+  theme_bw(base_size=10) + #black and white theme with set font size
+  #rotate x-axis labels so they don't overlap, 
+  #get rid of unnecessary axis titles
+  #adjust plot margins
+  theme(axis.text.x = element_text(angle = 90), 
+        axis.title.x=element_blank(), 
+        axis.title.y=element_blank(), 
+        plot.margin = unit(c(3, 1, 0, 0), "mm")) +
+  #set correlation fill gradient
+  scale_fill_gradient(low="white", high="red") + 
+  guides(fill=F) #omit unnecessary gradient legend
