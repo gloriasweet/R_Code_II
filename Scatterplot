@@ -1,0 +1,5 @@
+#scatterplot
+pairs() and coplot() in package graphics.
+gpairs() in package YaleToolkit.
+scatterplot.matrix() or spm() in package car.
+splom() in package lattice.
