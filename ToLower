@@ -1,0 +1,8 @@
+data1$device_os <- as.character(data1$device_os)
+
+data1<-data.frame(lapply(data1, function(device_os) {
+  if (is.character(device_os)) return(tolower(device_os))
+  else return(device_os)
+}))
+
+table(data1$device_os)
