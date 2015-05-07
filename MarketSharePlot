@@ -1,0 +1,89 @@
+
+#install package
+install.packages("ggplot2")
+library(ggplot2)
+
+#data1$imps<-as.numeric(data1$imps)
+#data1$dte<-as.Date(data1$dte)
+#change time format
+#data1$date <- strptime(as.character(data1$dte), "%d/%m/%Y")
+#data1<-data1[order(as.Date(data1$dte,format="%d/%b/%Y")),,drop=FALSE]
+
+data1$date<- ordered(data1$dte, 
+                    levels = c( "4/6/2015" , "4/7/2015" , "4/8/2015",  "4/9/2015" ,"4/10/2015", "4/11/2015" ,"4/12/2015" ,
+                                "4/13/2015" ,"4/14/2015" ,"4/15/2015", "4/16/2015" ,"4/17/2015" ,
+                                "4/18/2015","4/19/2015" ,"4/20/2015" ,"4/21/2015" ,"4/22/2015", "4/23/2015",
+                                "4/24/2015" ,"4/25/2015" ,"4/26/2015" ,"4/27/2015",
+                                "4/28/2015" ,"4/29/2015", "4/30/2015", "5/1/2015",  "5/2/2015", "5/3/2015" ))
+
+#library(plyr)
+# Sort by dte, then by site_base_url
+#data1<-arrange(data1, dte, site_base_url)         # Use arrange from plyr package
+#data1<-data1[order(data1$dte, data1$site_base_url), ]  # Use built-in R functions
+
+
+#Impression Volume Market Share
+ggplot(data1, aes(date, imps, fill=site_base_url)) + 
+  facet_wrap(~ site_base_url, ncol=1) + #place the factors in separate facets
+  geom_bar(stat="identity") + #make the bars
+  #coord_flip() + #flip the axes so the test names can be horizontal  
+  #define the fill color gradient: blue=positive, red=negative
+  #scale_fill_gradient2(name = "site_base_url") +
+  ylab("Daily Impression Volume") + #improve y-axis label
+  theme_bw(base_size=12)+
+  ggtitle("Daily Impression Volume for MoPub Android Top 5 Biggest Sites")+
+  theme(plot.title=element_text(family="Times", face="bold", size=14),
+        axis.text.x = element_text(size=8,face="bold"),
+        axis.title=element_text(face="bold.italic",size=14, color="brown"),
+        legend.position = "right")+
+  scale_x_discrete(breaks = c("4/6/2015","4/13/2015","4/20/2015","4/27/2015","5/3/2015"))
+
+
+#Impression Volume Market Share
+ggplot(data1, aes(date, ctr, color=site_base_url,size=ctr)) + 
+  facet_wrap(~ site_base_url, ncol=1) + #place the factors in separate facets
+  geom_point() +
+  ylab("CTR Daily Trends ") + 
+  xlab("Date")+
+  ggtitle("CTR Daily Trends for MoPub Android Top 5 Biggest Sites")+
+  theme(plot.title=element_text(family="Times", face="bold", size=14),
+        axis.text.x = element_text(size=14,face="bold"),
+        axis.title=element_text(face="bold.italic",size=14, color="brown"),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        strip.background = element_rect(colour="#9999CC", fill="#66CC99"))+
+  scale_x_discrete(breaks = c("4/6/2015","4/13/2015","4/20/2015","4/27/2015","5/3/2015"))
+
+
+#HOUR
+
+#Impression Volume Market Share
+ggplot(hour1, aes(hour, imps, fill=site_base_url)) + 
+  facet_wrap(~ site_base_url, ncol=1) + #place the factors in separate facets
+  geom_bar(stat="identity") + #make the bars
+  #coord_flip() + #flip the axes so the test names can be horizontal  
+  #define the fill color gradient: blue=positive, red=negative
+  #scale_fill_gradient2(name = "site_base_url") +
+  ylab("Hourly Impression Volume") + #improve y-axis label
+  theme_bw(base_size=12)+
+  ggtitle("Hourly Impression Volume for MoPub Android Top 5 Biggest Sites")+
+  theme(plot.title=element_text(family="Times", face="bold", size=14),
+        axis.text.x = element_text(size=8,face="bold"),
+        axis.title=element_text(face="bold.italic",size=14, color="brown"),
+        legend.position = "right")
+
+
+#Impression Volume Market Share
+ggplot(hour1, aes(hour, ctr, color=site_base_url,size=ctr)) + 
+  facet_wrap(~ site_base_url, ncol=1) + #place the factors in separate facets
+  geom_point() +
+  ylab("CTR Hourly Trends ") + 
+  xlab("Hour of Day")+
+  ggtitle("CTR Hourly Trends for MoPub Android Top 5 Biggest Sites")+
+  theme(plot.title=element_text(family="Times", face="bold", size=14),
+        axis.text.x = element_text(size=14,face="bold"),
+        axis.title=element_text(face="bold.italic",size=14, color="brown"),
+        strip.text.x = element_text(size=12, face="bold"),
+        strip.text.y = element_text(size=12, face="bold"),
+        strip.background = element_rect(colour="#9999CC", fill="#66CC99"))
+
