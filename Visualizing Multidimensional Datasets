@@ -71,3 +71,20 @@ ggplot(corrs.m, aes(Test2, Test, fill=abs(Correlation))) +
   #set correlation fill gradient
   scale_fill_gradient(low="white", high="red") + 
   guides(fill=F) #omit unnecessary gradient legend
+
+
+
+ggplot(diff, aes(hour, abs(pred_minus_actual), fill=pred_minus_actual)) + 
+  facet_wrap(~ site_base_url, nrow=1) + #place the factors in separate facets
+  geom_bar(stat="identity") + #make the bars
+  coord_flip() + #flip the axes so the test names can be horizontal  
+  #define the fill color gradient: blue=positive, red=negative
+  scale_fill_gradient2(name = "pred_minus_actual", 
+                       high = "blue", mid = "white", low = "red", 
+                       midpoint=0, guide=F) +
+  ylab("absolute value of the difference") + #improve y-axis label
+  theme_bw(base_size=12)+
+  ggtitle("Predicted CTR and Actual CTR Difference By Hour of Day
+  for Mopub Android Top 5 Biggest Sites with RTDM ON
+  Definition of Color Gradient: blue=positive(Pred-True>0), red=negative(Pred-True<0)")+
+  theme(plot.title=element_text(family="Times", face="bold", size=14))
