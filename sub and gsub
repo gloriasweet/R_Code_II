@@ -1,0 +1,21 @@
+http://rfunction.com/archives/2354
+
+
+sub(pattern, replacement, x)
+gsub(pattern, replacement, x)
+
+Replace the first occurrence of a pattern with sub or replace all occurrences with gsub.
+pattern – A pattern to search for, which is assumed to be a regular expression. Use an additional argument fixed=TRUE to look for a pattern without using regular expressions.
+replacement – A character string to replace the occurrence (or occurrences for gsub) of pattern.
+
+x – A character vector to search for pattern. Each element will be searched separately.
+
+x <- c("This is a sentence about axis", "A second pattern is also listed here")
+
+> sub("is", "XY", x)
+[1] "ThXY is a sentence about axis"       
+[2] "A second pattern XY also listed here"
+
+> gsub("is", "XY", x)
+[1] "ThXY XY a sentence about axXY"       
+[2] "A second pattern XY also lXYted here"
