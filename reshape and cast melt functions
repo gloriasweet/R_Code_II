@@ -1,0 +1,53 @@
+#reshape function
+http://had.co.nz/reshape/
+
+
+http://seananderson.ca/2013/10/19/reshape.html
+
+
+The reshape2 package
+reshape2 is based around two key functions: melt and cast:
+
+melt takes wide-format data and melts it into long-format data.
+
+cast takes long-format data and casts it into wide-format data.
+
+aql <- melt(airquality, id.vars = c("month", "day"))
+head(aql)
+
+#   month day variable value
+# 1     5   1    ozone    41
+# 2     5   2    ozone    36
+# 3     5   3    ozone    12
+# 4     5   4    ozone    18
+# 5     5   5    ozone    NA
+# 6     5   6    ozone    28
+
+aql <- melt(airquality, id.vars = c("month", "day"),
+  variable.name = "climate_variable", 
+  value.name = "climate_value")
+head(aql)
+
+#   month day climate_variable climate_value
+# 1     5   1            ozone            41
+# 2     5   2            ozone            36
+# 3     5   3            ozone            12
+# 4     5   4            ozone            18
+# 5     5   5            ozone            NA
+# 6     5   6            ozone            28
+
+aql <- melt(airquality, id.vars = c("month", "day"))
+aqw <- dcast(aql, month + day ~ variable)
+head(aqw)
+#   month day ozone solar.r wind temp
+# 1     5   1    41     190  7.4   67
+# 2     5   2    36     118  8.0   72
+# 3     5   3    12     149 12.6   74
+# 4     5   4    18     313 11.5   62
+# 5     5   5    NA      NA 14.3   56
+# 6     5   6    28      NA 14.9   66
+
+
+
+
+
