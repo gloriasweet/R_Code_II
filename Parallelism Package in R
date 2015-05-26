@@ -1,0 +1,13 @@
+http://www.slideshare.net/bytemining/taking-r-to-the-limit-high-performance-computing-in-r-part-1-parallelization-la-r-users-group-727
+
+http://www.bytemining.com/2010/08/taking-r-to-the-limit-part-ii-large-datasets-in-r/
+
+http://www.r-bloggers.com/handling-large-datasets-in-r/
+
+BTW, determining the number of rows of a very big file is tricky, you don't have to load the data first and use dim(), which easily leads to short of memory. One way of doing it is readLines(), for example:
+data <- gzfile("yourdata.zip",open="r")
+MaxRows <- 50000
+TotalRows <- 0
+while((LeftRow <- length(readLines(data,MaxRows))) > 0 )
+TotalRows <- TotalRows+LeftRow
+close(data) 
